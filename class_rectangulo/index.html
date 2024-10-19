@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Rectangulo</title>
+    <script src="class_rectangulo.js"></script>
+</head>
+<body>
+    <canvas width="1000" height="600" style="border: 1px solid;" id="contenedor">
+
+    </canvas>
+    <script>
+        var objeto_1 = {
+            x:100,
+            y:100,
+            base:200,
+            altura:100,
+            color: "red"
+        }
+        var objeto_2 = {
+            x:600,
+            y:100,
+            base:200,
+            altura:100,
+            color:"green"
+        }
+        var objeto_3 = {
+            x:190,
+            y:450,
+            base:560,
+            altura:70,
+            color:"blue"
+        }
+        var objeto_4 = {
+            x:410,
+            y:268,
+            base:100,
+            altura:100,
+            color: "rgba(55,209,209,0.5)" //rgb() -> color , rgba() ->agrega un valor extra al final que es transparencia entre 0 y 1
+        }
+        var rectangulo_1 = new Rectangulo(objeto_1);
+        var rectangulo_2 = new Rectangulo(objeto_2);
+        var rectangulo_3 = new Rectangulo(objeto_3);
+        var rectangulo_4 = new Rectangulo(objeto_4);
+        rectangulo_1.renderizarRectangulo();
+        rectangulo_2.renderizarRectangulo();
+        rectangulo_3.renderizarRectangulo();
+        rectangulo_4.renderizarRectangulo();
+    </script>
+</body>
+</html>

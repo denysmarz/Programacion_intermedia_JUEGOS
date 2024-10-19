@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <script src="class_ponk.js"></script>
+</head>
+<body>
+    <canvas width="1000" height="600" style="border: 5px solid;" id="contenedor"></canvas>
+    <script>
+        var objetoBarra_1 =  {
+            x: 0,
+            y: 200,
+            color: "blue",
+            base: 30,
+            altura: 200,
+            velocidad: 10,
+        }
+        var objetoBarra_2 =  {
+            x: 970,
+            y: 200,
+            color: "blue",
+            base: 30,
+            altura: 200,
+            velocidad: 10,
+        }
+        var objetoPelota_2 =  {
+            x: 80,
+            y: 300,
+            color: "red",
+            radio: 30,
+            velocidadX: 10,
+            velocidadY: 10,
+        }
+
+
+        var Barra_1 = new Barra(objetoBarra_1);
+        Barra_1.renderizarBarra();
+
+        var Barra_2 = new Barra(objetoBarra_2);
+        Barra_2.renderizarBarra("");
+
+        var pelota = new Pelota(objetoPelota_2);
+        pelota.renderizarPelota();
+
+        document.addEventListener('keyup', function(event) {
+            
+            if (event.key == 's') {
+                Barra_1.moverBarraJugador1("abajo");
+            }
+            if (event.key == 'w') {
+                Barra_1.moverBarraJugador1("arriba");
+            }
+
+            if (event.key == 'k') {
+                Barra_2.moverBarraJugador1("abajo");
+            }
+            if (event.key == 'i') {
+                Barra_2.moverBarraJugador1("arriba");
+            }
+        });
+    </script>
+</body>
+</html>

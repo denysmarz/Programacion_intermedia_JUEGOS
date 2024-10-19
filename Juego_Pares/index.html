@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JUEGO PARES</title>
+    <script src="class_pares.js"></script>
+</head>
+<body >
+    <h1>VIDEOJUEGOMEMORAMA</h1>
+    <h3>El videojuego consiste en encontrar los paraes de las imagenes</h3>
+    <h2><label id="contadorClic">Contador clic: 0</label></h2>
+    <canvas onmousedown="detectarCoordenadas(event)" width="600" height="600" style="border: 5px solid;" id="contenedor"></canvas>
+    <script>
+        var objeto_1 = {
+            x:0,
+            y:0,
+            base:150,
+            altura:150,
+            color: "rgb(55,209,209)",
+            id: 1
+        }
+        var objeto_2 = {
+            x:150,
+            y:0,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 2
+        }
+        var objeto_3 = {
+            x:300,
+            y:0,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 3
+        }
+        var objeto_4 = {
+            x:450,
+            y:0,
+            base:150,
+            altura:150,
+            color: "rgb(55,209,209)",
+            id: 4 //rgb() -> color , rgba() ->agrega un valor extra al final que es transparencia entre 0 y 1
+        }
+        var objeto_5 = {
+            x:0,
+            y:150,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 5
+        }
+        var objeto_6 = {
+            x:150,
+            y:150,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 6
+        }
+        var objeto_7 = {
+            x:300,
+            y:150,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 7
+        }
+        var objeto_8 = {
+            x:450,
+            y:150,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 8
+        }
+        var objeto_9 = {
+            x:0,
+            y:300,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 9
+        }
+        var objeto_10 = {
+            x:150,
+            y:300,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 10
+        }
+        var objeto_11 = {
+            x:300,
+            y:300,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 11
+        }
+        var objeto_12 = {
+            x:450,
+            y:300,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 12
+        }
+        var objeto_13 = {
+            x:0,
+            y:450,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 13
+        }
+        var objeto_14 = {
+            x:150,
+            y:450,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 14
+        }
+        var objeto_15 = {
+            x:300,
+            y:450,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 15
+        }
+        var objeto_16 = {
+            x:450,
+            y:450,
+            base:150,
+            altura:150,
+            color:"rgb(55,209,209)",
+            id: 16
+        }
+        var rectangulo_1 = new Rectangulo(objeto_1);
+        var rectangulo_2 = new Rectangulo(objeto_2);
+        var rectangulo_3 = new Rectangulo(objeto_3);
+        var rectangulo_4 = new Rectangulo(objeto_4);
+        var rectangulo_5 = new Rectangulo(objeto_5);
+        var rectangulo_6 = new Rectangulo(objeto_6);
+        var rectangulo_7 = new Rectangulo(objeto_7);
+        var rectangulo_8 = new Rectangulo(objeto_8);
+        var rectangulo_9 = new Rectangulo(objeto_9);
+        var rectangulo_10 = new Rectangulo(objeto_10);
+        var rectangulo_11 = new Rectangulo(objeto_11);
+        var rectangulo_12 = new Rectangulo(objeto_12);
+        var rectangulo_13 = new Rectangulo(objeto_13);
+        var rectangulo_14 = new Rectangulo(objeto_14);
+        var rectangulo_15 = new Rectangulo(objeto_15);
+        var rectangulo_16 = new Rectangulo(objeto_16);
+
+        rectangulo_1.generarPosiciones();
+
+        rectangulo_1.renderizarRectangulo();
+        rectangulo_2.renderizarRectangulo();
+        rectangulo_3.renderizarRectangulo();
+        rectangulo_4.renderizarRectangulo();
+        rectangulo_5.renderizarRectangulo();
+        rectangulo_6.renderizarRectangulo();
+        rectangulo_7.renderizarRectangulo();
+        rectangulo_8.renderizarRectangulo();
+        rectangulo_9.renderizarRectangulo();
+        rectangulo_10.renderizarRectangulo();
+        rectangulo_11.renderizarRectangulo();
+        rectangulo_12.renderizarRectangulo();
+        rectangulo_13.renderizarRectangulo();
+        rectangulo_14.renderizarRectangulo();
+        rectangulo_15.renderizarRectangulo();
+        rectangulo_16.renderizarRectangulo();
+
+        function detectarCoordenadas(event) {
+            var clientReact = document.getElementById("contenedor").getBoundingClientRect();
+            var x = parseInt(event.clientX - clientReact.left);
+            var y = parseInt(event.clientY - clientReact.top);
+            rectangulo_1.detectarCelda(x,y);
+            rectangulo_2.detectarCelda(x,y);
+            rectangulo_3.detectarCelda(x,y);
+            rectangulo_4.detectarCelda(x,y);
+            rectangulo_5.detectarCelda(x,y);
+            rectangulo_6.detectarCelda(x,y);
+            rectangulo_7.detectarCelda(x,y);
+            rectangulo_8.detectarCelda(x,y);
+            rectangulo_9.detectarCelda(x,y);
+            rectangulo_10.detectarCelda(x,y);
+            rectangulo_11.detectarCelda(x,y);
+            rectangulo_12.detectarCelda(x,y);
+            rectangulo_13.detectarCelda(x,y);
+            rectangulo_14.detectarCelda(x,y);
+            rectangulo_15.detectarCelda(x,y);
+            rectangulo_16.detectarCelda(x,y);
+        }
+        
+    </script>
+</body>
+</html>

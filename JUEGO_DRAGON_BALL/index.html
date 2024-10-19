@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tecla 'k' Presionada</title>
+    <script src="class_personajes.js"></script>
+</head>
+<body>
+
+    <canvas width="1000" height="600" style="border: 5px solid;background-color:aqua" id="contenedor" ></canvas>
+    
+    <script>
+        var objeto_1 = {
+            nombre: "Goku",
+            vida: 100,
+            x: 100,
+            y: 400
+        }
+        var objeto_2 = {
+            nombre: "Vegeta",
+            vida: 100,
+            x: 800,
+            y: 400
+        }
+
+        var personaje_1 = new Personaje(objeto_1);
+        var personaje_2 = new Personaje(objeto_2);
+
+
+        personaje_1.cargarPersonaje(11);
+        personaje_1.barraVida();
+        personaje_1.barraki();
+        //personaje_1.danio(0);
+
+        //ENEMIGO
+        personaje_2.cargarPersonaje(12);
+        personaje_1.asignarPersonajes(personaje_1);
+        personaje_1.asignarPersonajes(personaje_2);
+
+
+
+        
+
+        // Variable para controlar si la tecla está presionada
+        let teclaPresionada = false;
+
+        document.addEventListener('keydown', function(event) {
+            // Verificamos si la tecla presionada es 'k' y si aún no está presionada
+            if (event.key === 'k' && !teclaPresionada) {
+                teclaPresionada = true; // Marcamos que está presionada
+                personaje_1.cargarki(1);
+            }
+            if(event.key === 'm' && !teclaPresionada){
+                teclaPresionada = true;
+                personaje_1.cubrirse(1);
+            }
+            if(event.key === 'd' ){
+                //teclaPresionada = true;
+                personaje_1.mover("derecha",1);
+            }
+            if(event.key === 'a' ){
+                //teclaPresionada = true;
+                personaje_1.mover("izquierda",1);
+            }
+            if(event.key === 'j' ){
+                personaje_1.lanzarBola();
+            }
+            if(event.key === 'i' && !teclaPresionada){
+                teclaPresionada = true; // Marcamos que está presionada
+                personaje_1.especial(0);
+            }
+            if(event.key === 'o'){
+                personaje_1.punio("derecha");
+            }
+            if(event.key === 'u'){
+                personaje_1.punio("izquierda");
+            }
+            if(event.key === 'p'){
+                personaje_1.ultimate();
+            }
+
+        });
+
+        document.addEventListener('keyup', function(event) {
+            // Verificamos si la tecla soltada es 'k'
+            if (event.key === 'k') {
+                teclaPresionada = false; // Marcamos que ya no está presionada
+                personaje_1.cargarki(0);
+            }
+            if(event.key === 'm'){
+                teclaPresionada = false;
+                personaje_1.cubrirse(0);
+            }
+            if(event.key === 'd'){
+                teclaPresionada = false;
+                personaje_1.mover("derecha",0);
+            }if(event.key === 'a'){
+                teclaPresionada = false;
+                personaje_1.mover("izquierda",0);
+            }
+            if(event.key === 'j'){
+                teclaPresionada = false;
+                personaje_1.cargarPersonaje(12);
+            }
+            if(event.key === 'i'){
+                teclaPresionada = false;
+                personaje_1.especial(1);
+                setTimeout(() => {
+                    personaje_1.cargarPersonaje(12);
+                }, 1500);
+                
+            }
+        });
+    </script>
+</body>
+</html>
