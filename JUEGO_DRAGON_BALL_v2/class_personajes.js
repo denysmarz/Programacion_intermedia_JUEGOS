@@ -78,6 +78,7 @@ class Personaje {
             ctx.clearRect(this.getX() - 10, this.getY(), 10, 60);
         }
         if (pose == 4) {
+            
             ctx.clearRect(this.getX() - 20, this.getY() - 30, 82, 90);
         }
 
@@ -91,7 +92,7 @@ class Personaje {
             var cx = this.getX();
             var cy = this.getY();
         }
-
+        
         img.onload = function () {
             ctx.save(); // Guardar el estado actual del contexto
             if (voltear) {
@@ -99,6 +100,7 @@ class Personaje {
                 ctx.scale(-1, 1); // Invertir en el eje X
                 // Ajustar la posición para que la imagen se dibuje correctamente después de voltear
                 ctx.drawImage(img, -cx - img.width, cy); // Ajusta -cx - ancho de la imagen
+                
             } else {
                 // Dibujar normalmente
                 ctx.drawImage(img, cx, cy);
@@ -185,37 +187,7 @@ class Personaje {
             }
         }
     }
-    /*especial() {
-        if (this.getKi() >= 80) {
-            if (this.intervaloKi === null) {
-                var contador = 0;
-                this.intervaloKi = setInterval(() => {
-                    contador = contador + 1;
-                    if (this.getX() > this.getvectorPersonajes()[1].getX()) {
-                        this.cargarPersonaje(70 + contador, 99, true);
-                    } else {
-                        this.cargarPersonaje(70 + contador, 99);
-                    }
-                    console.log(contador)
-                    if (contador == 6) {
-                        this.cargarPoder(68);
-                        clearInterval(this.intervaloKi); // Detener la animación
-                        this.setKi(this.getKi() - 80);
-                        this.barraki();
-                        setTimeout(() => {
-                            this.intervaloKi = null; // Restablecer la variable
-                            if (this.getX() > this.getvectorPersonajes()[1].getX()) {
-                                this.cargarPersonaje(12, 4, true);
-                            } else {
-
-                                this.cargarPersonaje(12, 4);
-                            }
-                        }, 220);
-                    }
-                }, 200); // Velocidad de la animación (200ms entre cada imagen)
-            }
-        }
-    }*/
+    
     verificarColision(cx, cy) {
         console.log(cx, cy);
         if (this.getvectorPersonajes()[1].x == cx + 60 && this.getvectorPersonajes()[1].y + 15 == cy) {
@@ -224,6 +196,7 @@ class Personaje {
         }
         return false;
     }
+    
     /*cargarPoder(tipoPoder) {
         //graficar poder ESPECIAl
         var canvas = document.getElementById("contenedor");
@@ -269,7 +242,7 @@ class Personaje {
 class Enemigo extends Personaje {
     constructor(objetoPersonaje) {
         super(objetoPersonaje);
-        
+        this.intervaloKii = null;
     }
 
     barraVidaEnemigo() {
@@ -291,7 +264,7 @@ class Enemigo extends Personaje {
         ctx.beginPath();
         ctx.fillStyle = "yellow";
         //if (this.getKi() < 400) {
-        ctx.fillRect(880, 80, this.getKi(), 10);
+        ctx.fillRect(960- this.getKi(), 80, this.getKi(), 10);
         //}
         console.log("KiEnemigo: " + this.getKi());
         ctx.strokeRect(560, 80, 80, 10); //BORDE
@@ -302,19 +275,149 @@ class Enemigo extends Personaje {
         ctx.strokeRect(560, 80, 400, 10); //BORDE
         //400 480 560 640 720 800 880 960
     }
+    cargarKiEnemigo(estadoboton) {
+        if (estadoboton == 1 && this.intervaloKii === null) { // Solo empieza si no está ya en un intervalo
+            let contador = 0;
+            this.intervaloKii = setInterval(() => {
+                contador = (contador + 1) % 3; // Cicla entre 0, 1 y 2
+
+                if (this.getX() > this.getvectorPersonajes()[0].getX()) {
+                    this.cargarPersonaje(56 + contador, 3, true);
+                } else {
+                    this.cargarPersonaje(56 + contador, 3);
+                }
+                if (this.getKi() < 400) {
+                    this.setKi(this.getKi() + 10);
+                }
+                this.barrakiEnemigo(); // Actualiza la barra de ki
+            }, 100); // Velocidad de la animación (200ms entre cada imagen)
+        } else if (estadoboton == 0 && this.intervaloKii !== null) {
+            clearInterval(this.intervaloKii); // Detener la animación
+            this.intervaloKii = null; // Restablecer la variable
+            if (this.getX() > this.getvectorPersonajes()[0].getX()) {
+                this.cargarPersonaje(12, 4, true);
+            } else {
+                this.cargarPersonaje(12, 4);
+            }
+        }
+    }
+    especial() {
+        if (this.getKi() >= 80) {
+            if (this.intervaloKii === null) {
+                var contador = 0;
+                this.intervaloKii = setInterval(() => {
+                    contador = contador + 1;
+                    if (this.getX() > this.getvectorPersonajes()[0].getX()) {
+                        this.cargarPersonaje(70 + contador, 99, true);
+                    } else {
+                        this.cargarPersonaje(70 + contador, 99);
+                    }
+                    console.log(contador)
+                    if (contador == 3) {
+                        if(this.getX() > this.getvectorPersonajes()[0].getX()){
+                            this.cargarPoder(68,true);
+                        }else{
+                            this.cargarPoder(68);
+                        }
+                        clearInterval(this.intervaloKii); // Detener la animación
+                        this.setKi(this.getKi() - 80);
+                        this.barrakiEnemigo();
+                        setTimeout(() => {
+                            this.intervaloKii = null; // Restablecer la variable
+                            if (this.getX() > this.getvectorPersonajes()[0].getX()) {
+                                this.cargarPersonaje(12, 4, true);
+                            } else {
+                                this.cargarPersonaje(12, 4);
+                            }
+                        }, 220);
+                    }
+                }, 200); // Velocidad de la animación (200ms entre cada imagen)
+            }
+        }
+    }
+    cargarPoder(tipoPoder,voltear = false) {
+        //graficar poder ESPECIAl
+        var canvas = document.getElementById("contenedor");
+        var ctx = canvas.getContext("2d");
+        var img = new Image();
+        img.src = "MATERIALES/" + this.getNombre() + "/" + this.getNombre() + "_" + tipoPoder + ".png";
+        var self = this; // Guardar referencia a 'this' en una variable
+        img.onload = function () {
+        if (tipoPoder == 68 && self.getX() > self.getvectorPersonajes()[0].getX()) {
+            var cx = self.getX()-img.width;
+            var cy = self.getY() + 15;
+        }else{
+            var cx = self.getX() + 40;
+            var cy = self.getY() + 15;
+        }
+        
+        
+            ctx.save(); // Guardar el estado actual del contexto
+            var intervalo = setInterval(() => {
+                // Limpiar el área donde estaba la imagen anteriormente
+                
+                if(self.getX() > self.getvectorPersonajes()[0].getX()){
+                    ctx.clearRect(cx+10, cy, img.width, img.height);
+                    cx = cx - 10;
+                }else{
+                    ctx.clearRect(cx, cy, img.width, img.height);
+                    cx = cx + 10;
+                }
+                
+                if (voltear) {
+                    // Voltear horizontalmente (espejo)
+                    ctx.scale(-1, 1); // Invertir en el eje X
+                    // Ajustar la posición para que la imagen se dibuje correctamente después de voltear
+                    ctx.drawImage(img, -cx - img.width, cy); // Ajusta -cx - ancho de la imagen
+                } else {
+                    // Dibujar normalmente
+                    ctx.drawImage(img, cx, cy);
+                }
+
+                if(self.verificarColision(cx + 50, cy)){
+                    self.estaLanzandoAtaque = true; // Activamos el estado de ataque
+                }
+
+                if (self.verificarColision(cx, cy)) {
+                    clearInterval(intervalo);
+                    if (self.getvectorPersonajes()[0].getestadoGuardia() == 0) {
+                        self.getvectorPersonajes()[0].setVida(self.getvectorPersonajes()[0].getVida() - self.getDanioEspecial());
+                        self.getvectorPersonajes()[0].barraVida();
+                    }
+                    self.estaLanzandoAtaque = false; // Terminamos el ataque
+                    setTimeout(() => {
+                        ctx.clearRect(cx, cy, img.width, img.height);
+                    }, 100);
+                } else if (cx > canvas.width) {
+                    setTimeout(() => {
+                        clearInterval(intervalo);
+                    }, 100);
+                }
+            }, 20);
+            ctx.restore(); // Restaurar el estado original del contexto
+        };
+    }
+    verificarColision(cx, cy) {
+        console.log(cx, cy);
+        if (this.getvectorPersonajes()[0].x == cx + 60 && this.getvectorPersonajes()[0].y + 15 == cy) {
+            console.log("colision");
+            return true;
+        }
+        return false;
+    }
+
+
     reaccionarAtaque() {
         if (this.detectarAtaqueJugador()) {
-            console.log("El enemigo se cubre");
             this.getvectorPersonajes()[1].cubrirse(1,0); // El enemigo se cubre
             setTimeout(() => {
                 this.getvectorPersonajes()[1].cubrirse(0,0); // Deja de cubrirse después de un tiempo
-            }, 1500); // Mantener la guardia por 1.5 segundos (ajústalo según sea necesario)
+            }, 1000); // Mantener la guardia por 1.5 segundos (ajústalo según sea necesario)
         }
     }
     detectarAtaqueJugador() {
         // Detectar si el jugador está lanzando un ataque especial (puedes usar un indicador en el jugador)
         let jugador = this.getvectorPersonajes()[0]; // Suponiendo que el jugador está en la posición 0 del vector
-        console.log("EstaLanzandoAtaque: " + jugador.estaLanzandoAtaque);
         return jugador.estaLanzandoAtaque; // 'estaLanzandoAtaque' debería ser una variable o método en el jugador
     }
 }
@@ -370,7 +473,6 @@ class Jugador extends Personaje {
                         setTimeout(() => {
                             this.intervaloKi = null;
                             //this.estaLanzandoAtaque = false; // Terminamos el ataque
-                            console.log("holaa" + this.estaLanzandoAtaque);
                             if (this.getX() > this.getvectorPersonajes()[1].getX()) {
                                 this.cargarPersonaje(12, 4, true);
                             } else {
@@ -409,8 +511,8 @@ class Jugador extends Personaje {
                     if (self.getvectorPersonajes()[1].getestadoGuardia() == 0) {
                         self.getvectorPersonajes()[1].setVida(self.getvectorPersonajes()[1].getVida() - self.getDanioEspecial());
                         self.getvectorPersonajes()[1].barraVidaEnemigo();
-                        self.estaLanzandoAtaque = false; // Terminamos el ataque
                     }
+                    self.estaLanzandoAtaque = false; // Terminamos el ataque
                     setTimeout(() => {
                         ctx.clearRect(cx, cy, img.width, img.height);
                     }, 100);

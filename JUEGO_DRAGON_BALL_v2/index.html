@@ -40,7 +40,7 @@
         personaje_1.barraki();
 
         personaje_2.barraVidaEnemigo();
-        //personaje_2.barrakiEnemigo();
+        personaje_2.barrakiEnemigo();
         //personaje_1.danio(0);
 
         //ENEMIGO
@@ -75,6 +75,14 @@
                 teclaPresionada = true;
                 personaje_2.cubrirse(1, 0);
             }
+            if (event.key === 'b' && !teclaPresionada) {
+                personaje_2.cargarKiEnemigo(1);
+            }
+            if (event.key === 'v' && !teclaPresionada) {
+                personaje_2.especial(1);
+            }
+
+
             if (event.key === 'd') {
                 //teclaPresionada = true;
                 personaje_1.moverPersonaje("derecha", 1);
@@ -118,6 +126,10 @@
             if (event.key === 'n') {
                 teclaPresionada = false;
                 personaje_2.cubrirse(0, 0);
+            }
+            if (event.key === 'b') {
+                
+                personaje_2.cargarKiEnemigo(0);
             }
 
             if (event.key === 'd') {
