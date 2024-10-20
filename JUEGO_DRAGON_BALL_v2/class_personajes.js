@@ -78,7 +78,7 @@ class Personaje {
             ctx.clearRect(this.getX() - 10, this.getY(), 10, 60);
         }
         if (pose == 4) {
-            
+
             ctx.clearRect(this.getX() - 20, this.getY() - 30, 82, 90);
         }
 
@@ -92,19 +92,26 @@ class Personaje {
             var cx = this.getX();
             var cy = this.getY();
         }
-        
+        var self = this; // Guardar el contexto del objeto
         img.onload = function () {
             ctx.save(); // Guardar el estado actual del contexto
+    
+            // Calcular el ángulo de inclinación entre el personaje y el enemigo
+            let angulo = Math.atan2(self.getvectorPersonajes()[1].getY() - self.getY(), self.getvectorPersonajes()[1].getX() - self.getX());
+    
+            // Mover el contexto al centro del personaje
+            ctx.translate(cx + img.width / 2, cy + img.height / 2);
+            
+            // Aplicar la rotación basada en el ángulo calculado
+            ctx.rotate(angulo);
+            
             if (voltear) {
-                // Voltear horizontalmente (espejo)
-                ctx.scale(-1, 1); // Invertir en el eje X
-                // Ajustar la posición para que la imagen se dibuje correctamente después de voltear
-                ctx.drawImage(img, -cx - img.width, cy); // Ajusta -cx - ancho de la imagen
-                
-            } else {
-                // Dibujar normalmente
-                ctx.drawImage(img, cx, cy);
+                ctx.scale(-1, 1); // Voltear la imagen horizontalmente
             }
+            
+            // Dibujar el personaje en la posición central con rotación
+            ctx.drawImage(img, -img.width / 2, -img.height / 2);
+            
             ctx.restore(); // Restaurar el estado original del contexto
         };
     }
@@ -187,7 +194,7 @@ class Personaje {
             }
         }
     }
-    
+
     verificarColision(cx, cy) {
         console.log(cx, cy);
         if (this.getvectorPersonajes()[1].x == cx + 60 && this.getvectorPersonajes()[1].y + 15 == cy) {
@@ -196,7 +203,7 @@ class Personaje {
         }
         return false;
     }
-    
+
     /*cargarPoder(tipoPoder) {
         //graficar poder ESPECIAl
         var canvas = document.getElementById("contenedor");
@@ -231,6 +238,13 @@ class Personaje {
             }, 20);
         };
     }*/
+    getAnguloEntrePersonajes() {
+        let dx = this.getvectorPersonajes()[1].getX() - this.getX(); // Diferencia en X
+        let dy = this.getvectorPersonajes()[1].getY() - this.getY(); // Diferencia en Y
+        let angulo = Math.atan2(dy, dx); // Calcula el ángulo en radianes
+        return angulo;
+    }
+
 
     asignarPersonajes(personaje) {
         Personaje.vectorPersonajes.push(personaje);
@@ -264,7 +278,7 @@ class Enemigo extends Personaje {
         ctx.beginPath();
         ctx.fillStyle = "yellow";
         //if (this.getKi() < 400) {
-        ctx.fillRect(960- this.getKi(), 80, this.getKi(), 10);
+        ctx.fillRect(960 - this.getKi(), 80, this.getKi(), 10);
         //}
         console.log("KiEnemigo: " + this.getKi());
         ctx.strokeRect(560, 80, 80, 10); //BORDE
@@ -314,9 +328,9 @@ class Enemigo extends Personaje {
                     }
                     console.log(contador)
                     if (contador == 3) {
-                        if(this.getX() > this.getvectorPersonajes()[0].getX()){
-                            this.cargarPoder(68,true);
-                        }else{
+                        if (this.getX() > this.getvectorPersonajes()[0].getX()) {
+                            this.cargarPoder(68, true);
+                        } else {
                             this.cargarPoder(68);
                         }
                         clearInterval(this.intervaloKii); // Detener la animación
@@ -335,7 +349,7 @@ class Enemigo extends Personaje {
             }
         }
     }
-    cargarPoder(tipoPoder,voltear = false) {
+    cargarPoder(tipoPoder, voltear = false) {
         //graficar poder ESPECIAl
         var canvas = document.getElementById("contenedor");
         var ctx = canvas.getContext("2d");
@@ -343,27 +357,27 @@ class Enemigo extends Personaje {
         img.src = "MATERIALES/" + this.getNombre() + "/" + this.getNombre() + "_" + tipoPoder + ".png";
         var self = this; // Guardar referencia a 'this' en una variable
         img.onload = function () {
-        if (tipoPoder == 68 && self.getX() > self.getvectorPersonajes()[0].getX()) {
-            var cx = self.getX()-img.width;
-            var cy = self.getY() + 15;
-        }else{
-            var cx = self.getX() + 40;
-            var cy = self.getY() + 15;
-        }
-        
-        
+            if (tipoPoder == 68 && self.getX() > self.getvectorPersonajes()[0].getX()) {
+                var cx = self.getX() - img.width;
+                var cy = self.getY() + 15;
+            } else {
+                var cx = self.getX() + 40;
+                var cy = self.getY() + 15;
+            }
+
+
             ctx.save(); // Guardar el estado actual del contexto
             var intervalo = setInterval(() => {
                 // Limpiar el área donde estaba la imagen anteriormente
-                
-                if(self.getX() > self.getvectorPersonajes()[0].getX()){
-                    ctx.clearRect(cx+10, cy, img.width, img.height);
+
+                if (self.getX() > self.getvectorPersonajes()[0].getX()) {
+                    ctx.clearRect(cx + 10, cy, img.width, img.height);
                     cx = cx - 10;
-                }else{
+                } else {
                     ctx.clearRect(cx, cy, img.width, img.height);
                     cx = cx + 10;
                 }
-                
+
                 if (voltear) {
                     // Voltear horizontalmente (espejo)
                     ctx.scale(-1, 1); // Invertir en el eje X
@@ -374,7 +388,7 @@ class Enemigo extends Personaje {
                     ctx.drawImage(img, cx, cy);
                 }
 
-                if(self.verificarColision(cx + 50, cy)){
+                if (self.verificarColision(cx + 50, cy)) {
                     self.estaLanzandoAtaque = true; // Activamos el estado de ataque
                 }
 
@@ -409,15 +423,16 @@ class Enemigo extends Personaje {
 
     reaccionarAtaque() {
         if (this.detectarAtaqueJugador()) {
-            this.getvectorPersonajes()[1].cubrirse(1,0); // El enemigo se cubre
+            this.getvectorPersonajes()[1].cubrirse(1, 0); // El enemigo se cubre
             setTimeout(() => {
-                this.getvectorPersonajes()[1].cubrirse(0,0); // Deja de cubrirse después de un tiempo
+                this.getvectorPersonajes()[1].cubrirse(0, 0); // Deja de cubrirse después de un tiempo
             }, 1000); // Mantener la guardia por 1.5 segundos (ajústalo según sea necesario)
         }
     }
     detectarAtaqueJugador() {
         // Detectar si el jugador está lanzando un ataque especial (puedes usar un indicador en el jugador)
         let jugador = this.getvectorPersonajes()[0]; // Suponiendo que el jugador está en la posición 0 del vector
+        console.log("Jugador.estaLanzandoAtaque: " + jugador.estaLanzandoAtaque);
         return jugador.estaLanzandoAtaque; // 'estaLanzandoAtaque' debería ser una variable o método en el jugador
     }
 }
@@ -467,7 +482,7 @@ class Jugador extends Personaje {
                     }
                     if (contador == 6) {
                         this.cargarPoder(68);
-                        clearInterval(this.intervaloKi); 
+                        clearInterval(this.intervaloKi);
                         this.setKi(this.getKi() - 80);
                         this.barraki();
                         setTimeout(() => {
@@ -480,32 +495,55 @@ class Jugador extends Personaje {
                             }
                         }, 220);
                     }
-                }, 200); 
+                }, 200);
             }
         }
     }
     cargarPoder(tipoPoder) {
-        //graficar poder ESPECIAl
+        // Graficar poder ESPECIAL
         var canvas = document.getElementById("contenedor");
         var ctx = canvas.getContext("2d");
         var img = new Image();
         img.src = "MATERIALES/" + this.getNombre() + "/" + this.getNombre() + "_" + tipoPoder + ".png";
-        if (tipoPoder == 68) {
-            var cx = this.getX() + 40;
-            var cy = this.getY() + 15;
-        }
-        var self = this; // Guardar referencia a 'this' en una variable
+    
+        var cx = this.getX() + 40; // Posición inicial del ataque en X
+        var cy = this.getY() + 15; // Posición inicial del ataque en Y
+    
+        var self = this; // Guardar referencia a 'this'
+    
         img.onload = function () {
             var intervalo = setInterval(() => {
                 // Limpiar el área donde estaba la imagen anteriormente
                 ctx.clearRect(cx, cy, img.width, img.height);
-                cx = cx + 10;
-                ctx.drawImage(img, cx, cy);
-
                 if(self.verificarColision(cx + 50, cy)){
                     self.estaLanzandoAtaque = true; // Activamos el estado de ataque
                 }
-
+                // Calcular el ángulo de inclinación
+                let angulo = Math.atan2(
+                    self.getvectorPersonajes()[1].getY() - self.getY(),
+                    self.getvectorPersonajes()[1].getX() - self.getX()
+                );
+    
+                // Actualizar la posición del poder (moverlo hacia el enemigo)
+                cx += 10 * Math.cos(angulo);
+                cy += 10 * Math.sin(angulo);
+    
+                // Guardar el estado actual del contexto
+                ctx.save();
+    
+                // Mover el contexto al centro de la imagen del poder
+                ctx.translate(cx + img.width / 2, cy + img.height / 2);
+    
+                // Aplicar la rotación basada en el ángulo calculado
+                ctx.rotate(angulo);
+    
+                // Dibujar la imagen del poder en la posición inclinada
+                ctx.drawImage(img, -img.width / 2, -img.height / 2);
+    
+                // Restaurar el contexto al estado original
+                ctx.restore();
+    
+                // Verificar colisiones
                 if (self.verificarColision(cx, cy)) {
                     clearInterval(intervalo);
                     if (self.getvectorPersonajes()[1].getestadoGuardia() == 0) {
@@ -516,12 +554,13 @@ class Jugador extends Personaje {
                     setTimeout(() => {
                         ctx.clearRect(cx, cy, img.width, img.height);
                     }, 100);
-                } else if (cx > canvas.width) {
-                    setTimeout(() => {
-                        clearInterval(intervalo);
-                    }, 100);
+                } else if (cx > canvas.width || cx < 0 || cy > canvas.height || cy < 0) {
+                    // Si el ataque sale del canvas, detener el intervalo
+                    clearInterval(intervalo);
                 }
-            }, 20);
+            }, 20); // Ajustar velocidad del ataque
         };
     }
+    
+
 }
